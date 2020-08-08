@@ -1,0 +1,42 @@
+{
+    "name": "nearata/flarum-ext-is-online",
+    "description": "Check if the internet connection (of the user) is up.",
+    "keywords": [
+        "flarum",
+        "ping",
+        "online",
+        "internet",
+        "detect",
+        "network"
+    ],
+    "type": "flarum-extension",
+    "license": "MIT",
+    "require": {
+        "flarum/core": "^0.1.0-beta.13"
+    },
+    "authors": [
+        {
+            "name": "William Di Cicco",
+            "email": "williamdicicco@protonmail.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Nearata\\IsOnline\\": "src/"
+        }
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "Is Online",
+            "icon": {
+                "name": "fas fa-ethernet",
+                "backgroundColor": "#1266de",
+                "color": "#fff"
+            }
+        },
+        "flagrow": {
+            "discuss": ""
+        }
+    }
+}

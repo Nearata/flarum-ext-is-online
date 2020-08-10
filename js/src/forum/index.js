@@ -1,22 +1,41 @@
 import app from 'flarum/app';
-const isOnline = require('is-online');
 
 app.initializers.add('nearata/flarum-ext-is-online', () => {
-    const isOnlineElement = document.createElement('div');
+    window.addEventListener('load', () => {
+        const isOnlineElement = document.createElement('div');
 
-    isOnlineElement.id = 'is-online-alert';
-    isOnlineElement.innerText = app.translator.trans('nearata-is-online.forum.offline_text');
+        isOnlineElement.id = 'is-online-alert';
+        isOnlineElement.innerText = app.translator.trans('nearata-is-online.forum.offline_text');
 
-    document.body.appendChild(isOnlineElement);
+        document.body.appendChild(isOnlineElement);
 
-    setInterval(() => {
-        (async () => {
-            const ok = await isOnline();
-            if(ok) {
+        let ws;
+        let spawned = false;
+        function connect() {
+            ws = new WebSocket('wss://echo.websocket.org/');
+
+            ws.onopen = () => {
                 isOnlineElement.classList.remove('offline');
-            } else {
-                isOnlineElement.classList.add('offline');
-            }
-        })();
-    }, 1000);
+            };
+
+            ws.onerror = () => {
+                if (ws) {
+                    ws.close();
+                    ws = null;
+                }
+
+                if (!spawned) {
+                    spawned = true;
+                    isOnlineElement.classList.add('offline');
+                }
+
+                setTimeout(() => {
+                    spawned = false;
+                    connect();
+                }, 5000);
+            };
+        }
+
+        connect();
+    });
 });
